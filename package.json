@@ -15,7 +15,7 @@
     "monitor",
     "node"
   ],
-  "author": "Peter Banigo",
+  "author": "H-Baoo",
   "license": "ISC",
   "dependencies": {
     "axios": "^0.27.2",
