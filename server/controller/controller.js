@@ -108,5 +108,40 @@ exports.delete = (req,res)=>{
                 message: "Could not delete Drug with id=" + id
             });
         });
+// Purchase drug
+exports.purchase = async (req, res) => {
+  try {
+    const { id, quantity } = req.body; // lấy id thuốc và số lượng mua
+    if (!id || !quantity || quantity <= 0) {
+      return res.status(400).json({ message: "Invalid purchase request" });
+    }
+
+    // Tìm thuốc
+    const drug = await Drug.findById(id);
+    if (!drug) {
+      return res.status(404).json({ message: "Drug not found" });
+    }
+
+    // Kiểm tra số pack còn đủ không
+    if (drug.pack < quantity) {
+      return res.status(400).json({ message: "Not enough stock available" });
+    }
+
+    // Trừ pack
+    drug.pack -= quantity;
+    await drug.save();
+
+    res.json({
+      message: "Purchase successful",
+      drug: {
+        id: drug._id,
+        name: drug.name,
+        remainingPack: drug.pack
+      }
+    });
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+};
 
 }

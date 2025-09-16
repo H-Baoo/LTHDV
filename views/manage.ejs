@@ -41,6 +41,28 @@
 			<% } %> <!--  End loop -->
 		</tbody>
 	</table>
+	<!-- Script xử lý delete -->
+<script>
+  document.addEventListener("DOMContentLoaded", function() {
+    const deleteButtons = document.querySelectorAll(".delete");
+
+    deleteButtons.forEach(btn => {
+      btn.addEventListener("click", function() {
+        const id = this.getAttribute("data-id");
+          fetch(`/api/drugs/${id}`, { method: "DELETE" })
+            .then(res => res.json())
+            .then(data => {
+              alert(data.message);
+              this.closest("tr").remove();
+            })
+            .catch(err => {
+              console.error(err);
+              alert("Failed to delete drug!");
+            });
+      });
+    });
+  });
+</script>
 </main>
 <!-- End main section -->
 <!-- add footer -->

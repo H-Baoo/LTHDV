@@ -39,6 +39,42 @@
         </div>
     </div>
 </form>
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+  const form = document.getElementById("update_drug");
+
+  form.addEventListener("submit", function (e) {
+    e.preventDefault(); // chặn submit mặc định
+
+    const id = form.querySelector("input[name='id']").value;
+    const updatedDrug = {
+      name: form.querySelector("input[name='name']").value,
+      card: Number(form.querySelector("input[name='card']").value),
+      pack: Number(form.querySelector("input[name='pack']").value),
+      perDay: Number(form.querySelector("input[name='perDay']").value),
+      dosage: form.querySelector("input[name='dosage']").value
+    };
+
+    fetch(`/api/drugs/${id}`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify(updatedDrug)
+    })
+      .then(res => res.json())
+      .then(data => {
+        alert(data.message || "Drug updated successfully!");
+        // chuyển về trang quản lý sau khi update
+        window.location.href = "/manage";
+      })
+      .catch(err => {
+        console.error(err);
+        alert("Failed to update drug!");
+      });
+  });
+});
+</script>
 </main>
 <!-- End main section -->
 <!-- add footer -->
